@@ -129,7 +129,7 @@
 				let i = Math.floor(e.offsetX/30);
 				let j = Math.floor(e.offsetY/30);
 				
-				if(chessBord[i][j] == 1){
+				if(chessBord[i][j] == 1 || chessBord[i][j] == 2){
 					alert("此处已下子");
 					return
 				}
