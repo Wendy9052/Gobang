@@ -109,7 +109,7 @@
 			}
 			// console.log("wins[]",wins);
 			
-			console.log("五子棋的赢法有：",count,"种");
+			// console.log("五子棋的赢法有：",count,"种");
 			
 			
 			
@@ -125,7 +125,7 @@
 			canvas.onclick = (e)=>{
 				
 				
-				console.log(e.offsetX,e.offsetY);
+				// console.log(e.offsetX,e.offsetY);
 				let i = Math.floor(e.offsetX/30);
 				let j = Math.floor(e.offsetY/30);
 				
@@ -134,7 +134,7 @@
 					return
 				}
 				
-				console.log("i,j:",i,j);
+				// console.log("i,j:",i,j);
 				
 				let chess = canvas.getContext("2d");
 				chess.beginPath();
@@ -160,7 +160,7 @@
 						location.reload(); 
 					}
 				}
-				console.log(myWin);
+				// console.log(myWin);
 				
 				computeAI();
 			}
@@ -226,7 +226,7 @@
 					}
 				}
 				
-				console.log("ss",myScore,u,v,max);
+				// console.log("ss",myScore,u,v,max);
 				
 				let compute_chess = canvas.getContext('2d');
 				
