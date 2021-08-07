@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			body{
+				background: black;
+			}
+			canvas{
+				background: #FFFFFF;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="canvas" width="450" height="450">
+			
+		</canvas>
+		<script type="text/javascript">
+			let canvas = document.getElementById("canvas");
+			
+			let context = canvas.getContext("2d");
+			
+			context.arc(100,100,25,0,Math.PI*2,false);
+			
+			// 棋子高光范围
+			let gad = context.createRadialGradient(100,100,25,125,70,1);
+			
+			// 棋子高光颜色 渐变头尾
+			gad.addColorStop(0,"black");
+			gad.addColorStop(1,"white");
+			
+			// 给棋子填充高光填充颜色
+			context.fillStyle = gad;
+			context.fill();
+			context.stroke();
+			
+		</script>
+	</body>
+</html>

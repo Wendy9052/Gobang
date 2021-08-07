@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			body{
+				background: #000000;
+			}
+			canvas{
+				background: #fff;
+				width: 800;
+				height: 800;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="canvas" width="" height=""></canvas>
+		<script type="text/javascript">
+			let canvas = document.getElementById("canvas");
+			let context = canvas.getContext("2d");
+			
+			// 开始画
+			context.beginPath();
+			
+			// arc(x,y,半径,起始角度,终点角度,顺时针false/逆时针true)从哪个点开始去画弧度
+			context.arc(80,80,30,0,2*Math.PI,true);
+			
+			// 给圆填充颜色
+			context.fill(); 
+			
+			context.stroke();
+		</script>
+	</body>
+</html>

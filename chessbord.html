@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>@来玩五子棋吧</title>
+		<style type="text/css">
+			body{
+				background: #000000;
+			}
+			canvas{
+				background: #FFFFFF;
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				transform: translate(-50%,-50%);
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="canvas" width="450" height="450"></canvas>
+		<div class="canvas_box">
+		</div>
+		<script type="text/javascript">
+			
+			let canvas = document.getElementById("canvas");
+			let context = canvas.getContext("2d");
+			
+			
+			// 设置画笔的颜色
+			context.strokeStyle = "#a5a5a5";
+			
+			// 开始画了
+			context.beginPath();
+			for(let i=0; i < 15; i++){
+				// 画横线
+				context.moveTo(15,15+i*30);
+				context.lineTo(435,15+i*30);
+				
+				// 画竖线
+				context.moveTo(15+i*30,15);
+				context.lineTo(15+i*30,435);
+				context.stroke();
+			}
+			
+			// 定义棋盘 - 二维数组 (用数组显示棋盘)
+			let chessBord = [];
+			for(let i=0; i< 15; i++){
+				chessBord[i] = [];
+				for(let j=0; j< 15; j++){
+					chessBord[i][j] = 0;
+				}
+			}
+			
+			// 赢法数组
+			let wins = [];
+			// 一共有多少种赢法
+			let count = 0;
+			// 赢法统计数组
+			let myWin = [];
+			
+			// 电脑的赢法数组
+			let computerWin = [];
+			
+			// 初始化赢法数组
+			for(let i=0; i < 15; i++){
+				wins[i] = [];
+				for(let j=0; j < 15; j++){
+					wins[i][j] = [];
+				}
+			}
+			// 横着赢：(i表示纵向 j表示横向)
+			for(let i = 0; i < 15; i++){
+				for(let j = 0; j < 11; j++){
+					for(let k = 0; k < 5; k++){
+						wins[i][j+k][count] = true; 
+					}
+					count++;
+				}
+			}
+			
+			// 竖着赢：()
+			for(let i=0; i < 11; i++){
+				for(let j=0; j<15; j++){
+					for(let k=0; k < 5; k++){
+						wins[i+k][j][count] = true;
+					}
+					count++;
+				}
+			}
+			
+			// 左斜着赢\
+			for(let i=0; i<11; i++){
+				for(let j=0; j<11; j++){
+					for(let k=0; k < 5; k++){
+						wins[i+k][j+k][count] = true;
+					}
+					count++;
+				}
+			}
+			
+			// 右斜着赢/
+			for(let i=14; i >= 4; i--){
+				for(let j=0; j < 11; j++){
+					for(let k=0; k < 5; k++){
+						wins[i-k][j+k][count] = true;
+					}
+					count++;
+				}
+			}
+			// console.log("wins[]",wins);
+			
+			console.log("五子棋的赢法有：",count,"种");
+			
+			
+			
+			// console.log(chessBord);
+			
+			
+			for(let i=0; i<count; i++){
+				myWin[i] = 0; 
+				computerWin[i] = 0;
+			}
+			
+			
+			canvas.onclick = (e)=>{
+				
+				
+				console.log(e.offsetX,e.offsetY);
+				let i = Math.floor(e.offsetX/30);
+				let j = Math.floor(e.offsetY/30);
+				
+				if(chessBord[i][j] == 1){
+					alert("此处已下子");
+					return
+				}
+				
+				console.log("i,j:",i,j);
+				
+				let chess = canvas.getContext("2d");
+				chess.beginPath();
+				chess.arc(15 + i*30, 15+ j*30, 12, 0, 2*Math.PI,false);
+				
+				let crg = chess.createRadialGradient(15+i*30, 15+j*30, 12, 15+i*30+2, 15+j*30-2, 0);
+				crg.addColorStop(0,"black");
+				crg.addColorStop(1,"white");
+				chess.fillStyle = crg;
+				chess.fill();
+				
+				chess.stroke();
+				
+				chessBord[i][j] = 1;
+				// console.log(chessBord);
+				
+				for(var k=0; k<count; k++){
+					if(wins[i][j][k]){
+						myWin[k]++;
+					}
+					if(myWin[k] == 5){
+						alert("You Win!");
+						location.reload(); 
+					}
+				}
+				console.log(myWin);
+				
+				computeAI();
+			}
+			
+			function computeAI(){
+				let myScore = [];
+				let computeScore = [];
+				let u=0,v=0;
+				let max = 0;
+				
+				for(let i=0; i < 15; i++){
+					myScore[i] = [];
+					computeScore[i] = [];
+					for(let j=0; j < 15; j++){
+						myScore[i][j] = 0;
+						computeScore[i][j] = 0;
+					}
+				}
+				for(let i=0; i<15; i++){
+					for(let j=0; j < 15; j++){
+						if(chessBord[i][j] == 0){
+							for(let k=0; k < count; k++){
+								if(wins[i][j][k]){
+									switch(myWin[k]){
+										case 1: myScore[i][j] += 200;break;
+										case 2: myScore[i][j] += 500;break;
+										case 3: myScore[i][j] += 2000;break;
+										case 4: myScore[i][j] += 5000;break;
+									}
+									
+									switch(computerWin[k]){
+										case 1: computeScore[i][j] += 220;break;
+										case 2: computeScore[i][j] += 520;break;
+										case 3: computeScore[i][j] += 2020;break;
+										case 4: computeScore[i][j] += 10000;break;
+									}
+								}
+							}
+							
+							// 防守
+							if(myScore[i][j] > max){
+								max = myScore[i][j];
+								u = i; 
+								v = j;
+							}else if(myScore[i][j] == max){
+								if(computeScore[i][j] > computeScore[u][v]){
+									u = i;
+									v = j;
+								}
+							}
+							// 进功
+							if(computeScore[i][j] > max){
+								max = computeScore[i][j];
+								u = i; 
+								v = j;
+							}else if(computeScore[i][j] == max){
+								if(myScore[i][j] > myScore[u][v]){
+									u=i;
+									v=j;
+								}
+							}
+						}
+					}
+				}
+				
+				console.log("ss",myScore,u,v,max);
+				
+				let compute_chess = canvas.getContext('2d');
+				
+				compute_chess.beginPath();
+				compute_chess.arc(15+u*30,15+v*30,12,0,Math.PI*2,false);
+				let compute_crg = compute_chess.createRadialGradient(15+u*30,15+v*30,12,15+u*30+2,15+v*30-2,0);
+				compute_crg.addColorStop(0,"white");
+				compute_crg.addColorStop(1,"#ccc");
+				
+				compute_chess.fillStyle = compute_crg;
+				context.fill();
+				context.stroke();
+				chessBord[u][v] = 2;
+				
+				for(var k=0; k < count; k++){
+					if(wins[u][v][k]){
+						computerWin[k]++;
+						if(computerWin[k] == 5){
+							alert("You Lost！");
+							location.reload(); 
+						}
+					}
+				}
+				
+			}
+			
+		</script>
+	</body>
+</html>

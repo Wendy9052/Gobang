@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			body{
+				background: #000;
+			}
+			canvas{
+				background: #fff;
+				height: 800px;
+				width: 800px;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="canvas" width="" height=""></canvas>
+		<script type="text/javascript">
+			let canvas = document.getElementById("canvas");
+			
+			let context = canvas.getContext("2d");
+			
+			// context对象上有很多画画的功能
+			console.log(context);
+			
+			// 要开始画了
+			context.beginPath();
+			
+			// moveTo(x,y)就是从那个点开始画
+			context.moveTo(20,20);
+			
+			// 更改画笔的颜色
+			context.strokeStyle = "red";
+			
+			// lineTo(x,y)画到哪个点
+			context.lineTo(120,120);
+			context.lineTo(150,30);
+			
+			// 画完了收笔
+			context.stroke();
+			
+		</script>
+	</body>
+</html>
